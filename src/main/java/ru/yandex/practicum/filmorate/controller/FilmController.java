@@ -46,10 +46,10 @@ public class FilmController {
 
     @PutMapping("/films")
     public Film updateFilm(@RequestBody Film film) throws ValidationException {
-        /*if (!films.containsKey(film.getId())) {
+        if (!films.containsKey(film.getId())) {
             log.error("Фильм '{}' с id '{}' не найден в списке!", film.getName(), film.getId());
             throw new ValidationException("The film not found in the map!");
-        } */
+        }
         if (isValidate(film)) {
             films.put(film.getId(), film);
             log.info("Отредактирован фильм '{}'", film.getName());
@@ -72,7 +72,7 @@ public class FilmController {
         } else if (film.getReleaseDate().isBefore(FIRST_EVER_FILM)) {
             log.error("Дата релиза не может быть раньше 28 декабря 1895 года");
             throw new ValidationException("invalid release date");
-        } else if (film.getDuration().isNegative()) {
+        } else if (film.getDuration() > 0) {
             log.error("Продолжительность фильма должна быть положительной");
             throw new ValidationException("invalid duration");
         } else {
