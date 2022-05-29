@@ -13,14 +13,14 @@ import java.util.Map;
 @Slf4j
 public class UserController {
     private final Map<Long, User> users;
-    private static long idCounter = 0;
+    private static long idCounter;
 
     public UserController() {
         users = new HashMap<>();
     }
 
     private static long createID() {
-        return idCounter++;
+        return ++idCounter;
     }
 
     @PostMapping("/users")

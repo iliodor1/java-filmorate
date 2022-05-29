@@ -15,14 +15,14 @@ public class FilmController {
     private static final int MAX_DESCRIPTION_SIZE = 200;
     private static final LocalDate FIRST_EVER_FILM = LocalDate.of(1895, 12, 28);
     private final Map<Long, Film> films;
-    private static long idCounter = 0;
+    private static long idCounter;
 
     public FilmController() {
         films = new HashMap<>();
     }
 
     private static long createID() {
-        return idCounter++;
+        return ++idCounter;
     }
 
     @PostMapping("/films")
