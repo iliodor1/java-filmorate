@@ -9,6 +9,7 @@ import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -55,5 +56,21 @@ public class FilmService {
                 .sorted(Comparator.comparingInt(f0 -> f0.getLikes().size() * -1))
                 .limit(count)
                 .collect(Collectors.toList());
+    }
+
+    public Film addFilm(Film film) {
+        return filmStorage.addFilm(film);
+    }
+
+    public Film updateFilm(Film film) {
+        return filmStorage.updateFilm(film);
+    }
+
+    public Map<Long, Film> getAllFilms() {
+        return filmStorage.getAllFilms();
+    }
+
+    public Film getFilm(Long id) {
+        return filmStorage.getFilm(id);
     }
 }

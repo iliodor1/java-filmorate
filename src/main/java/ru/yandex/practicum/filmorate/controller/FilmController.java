@@ -7,7 +7,6 @@ import ru.yandex.practicum.filmorate.exception.IncorrectCountException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.service.FilmService;
-import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,33 +14,31 @@ import java.util.List;
 @RestController
 @Slf4j
 public class FilmController {
-    FilmStorage filmStorage;
     FilmService filmService;
 
     @Autowired
-    public FilmController(FilmStorage filmStorage, FilmService filmService) {
-        this.filmStorage = filmStorage;
+    public FilmController(FilmService filmService) {
         this.filmService = filmService;
     }
 
     @PostMapping("/films")
     public Film addFilm(@RequestBody Film film) throws ValidationException {
-        return filmStorage.addFilm(film);
+        return filmService.addFilm(film);
     }
 
     @PutMapping("/films")
     public Film updateFilm(@RequestBody Film film) throws ValidationException {
-        return filmStorage.updateFilm(film);
+        return filmService.updateFilm(film);
     }
 
     @GetMapping("/films")
     public List<Film> getAllFilms() {
-        return new ArrayList<>(filmStorage.getAllFilms().values());
+        return new ArrayList<>(filmService.getAllFilms().values());
     }
 
     @GetMapping("/films/{id}")
     public Film getFilm(@PathVariable Long id) {
-        return filmStorage.getFilm(id);
+        return filmService.getFilm(id);
     }
 
     @PutMapping("/films/{id}/like/{userId}")
