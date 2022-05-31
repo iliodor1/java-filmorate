@@ -24,7 +24,7 @@ public class FilmService {
     }
 
     public Film putLike(Long id, Long userId) {
-        Film film = filmStorage.getAllFilms().get(id);
+        Film film = filmStorage.getFilm(id);
         if (film == null) {
             log.error("Фильм с id '{}' не найден в списке!", id);
             throw new FilmNotFoundException(String.format("Фильм с id '%d' не найден.", id));
@@ -36,7 +36,7 @@ public class FilmService {
     }
 
     public Film deleteLike(Long id, Long userId) {
-        Film film = filmStorage.getAllFilms().get(id);
+        Film film = filmStorage.getFilm(id);
         if (film == null) {
             log.error("Фильм с id '{}' не найден в списке!", id);
             throw new FilmNotFoundException(String.format("Фильм с id '%d' не найден.", id));
@@ -52,7 +52,7 @@ public class FilmService {
     }
 
     public List<Film> getFilmsByCountLikes(Integer count) {
-        return filmStorage.getAllFilms().values().stream()
+        return filmStorage.getAllFilms().stream()
                 .sorted(Comparator.comparingInt(f0 -> f0.getLikes().size() * -1))
                 .limit(count)
                 .collect(Collectors.toList());
@@ -66,7 +66,7 @@ public class FilmService {
         return filmStorage.updateFilm(film);
     }
 
-    public Map<Long, Film> getAllFilms() {
+    public List<Film> getAllFilms() {
         return filmStorage.getAllFilms();
     }
 

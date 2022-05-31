@@ -8,8 +8,11 @@ import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Component
@@ -61,8 +64,8 @@ public class InMemoryFilmStorage implements FilmStorage {
     }
 
     @Override
-    public Map<Long, Film> getAllFilms() {
-        return films;
+    public List<Film> getAllFilms() {
+        return new ArrayList<>(films.values());
     }
 
     @Override

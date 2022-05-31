@@ -8,7 +8,6 @@ import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.service.FilmService;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -33,7 +32,7 @@ public class FilmController {
 
     @GetMapping("/films")
     public List<Film> getAllFilms() {
-        return new ArrayList<>(filmService.getAllFilms().values());
+        return filmService.getAllFilms();
     }
 
     @GetMapping("/films/{id}")
