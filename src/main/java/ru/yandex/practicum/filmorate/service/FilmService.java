@@ -23,7 +23,7 @@ public class FilmService {
         this.filmStorage = filmStorage;
     }
 
-    public Film putLike(Long id, Long userId) {
+    public void putLike(Long id, Long userId) {
         Film film = filmStorage.getFilm(id);
         if (film == null) {
             log.error("Фильм с id '{}' не найден в списке!", id);
@@ -32,7 +32,6 @@ public class FilmService {
         Set<Long> likes = film.getLikes();
         likes.add(userId);
         film.setLikes(likes);
-        return film;
     }
 
     public Film deleteLike(Long id, Long userId) {
