@@ -51,10 +51,10 @@ public class FilmController {
     }
 
     @GetMapping("/films/popular")
-    public List<Film> getFilmsByCountLikes(@RequestParam(defaultValue = "10") Integer count){
+    public List<Film> getPopular(@RequestParam(defaultValue = "10") int count){
         if (count <= 0) {
             throw new BadRequestException("Параметр count имеет отрицательное значение.");
         }
-        return filmService.getFilmsByCountLikes(count);
+        return filmService.getPopular(count);
     }
 }
