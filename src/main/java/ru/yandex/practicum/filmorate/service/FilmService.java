@@ -34,7 +34,7 @@ public class FilmService {
         film.setLikes(likes);
     }
 
-    public Film deleteLike(Long id, Long userId) {
+    public void deleteLike(Long id, Long userId) {
         Film film = filmStorage.getFilm(id);
         if (film == null) {
             log.error("Фильм с id '{}' не найден в списке!", id);
@@ -47,7 +47,6 @@ public class FilmService {
             );
         }
         film.getLikes().remove(userId);
-        return film;
     }
 
     public List<Film> getFilmsByCountLikes(Integer count) {
