@@ -10,7 +10,7 @@ public class ErrorHandler {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handleIncorrectParameterException(IncorrectCountException e) {
+    public ErrorResponse handleBadRequestException(BadRequestException e) {
         return new ErrorResponse("error", e.getMessage());
     }
 
