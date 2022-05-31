@@ -7,7 +7,6 @@ import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.service.UserService;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -32,7 +31,7 @@ public class UserController {
 
     @GetMapping("/users")
     public List<User> getAllUsers() {
-        return new ArrayList<>(userService.getAllUsers().values());
+        return userService.getAllUsers();
     }
 
     @GetMapping("/users/{id}")

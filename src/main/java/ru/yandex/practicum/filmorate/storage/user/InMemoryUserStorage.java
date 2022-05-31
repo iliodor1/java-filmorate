@@ -7,7 +7,9 @@ import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Component
@@ -23,6 +25,7 @@ public class InMemoryUserStorage implements UserStorage {
     private static long createID() {
         return ++idCounter;
     }
+
     @Override
     public User addUser(User user) {
         if (users.values().stream()
@@ -33,7 +36,7 @@ public class InMemoryUserStorage implements UserStorage {
             throw new ValidationException("This user already exists");
         }
         isValid(user);
-        if(user.getId() == null) user.setId(createID());
+        if (user.getId() == null) user.setId(createID());
         users.put(user.getId(), user);
 
         return user;
@@ -46,7 +49,7 @@ public class InMemoryUserStorage implements UserStorage {
 
     @Override
     public User updateUser(User user) {
-        if (!users.containsKey(user.getId())){
+        if (!users.containsKey(user.getId())) {
             log.error("Пользователь '{}' c id '{}' не найден", user.getLogin(), user.getId());
             throw new UserNotFoundException(
                     String.format("Пользователь с id:'%d' не найден.", user.getId()));
@@ -59,13 +62,13 @@ public class InMemoryUserStorage implements UserStorage {
     }
 
     @Override
-    public Map<Long, User> getAllUsers() {
-        return users;
+    public List<User> getAllUsers() {
+        return new ArrayList<>(users.values());
     }
 
     @Override
     public User getUser(Long id) {
-        if(users.get(id) == null) {
+        if (users.get(id) == null) {
             log.error("Пользователь с id '{}' не найден.", id);
             throw new UserNotFoundException(
                     String.format("Пользователь с id:'%d' не найден.", id)
@@ -73,7 +76,6 @@ public class InMemoryUserStorage implements UserStorage {
         }
         return users.get(id);
     }
-
 
     private boolean isValid(User user) throws ValidationException {
         if (user.getEmail().isBlank() || !user.getEmail().contains("@")) {

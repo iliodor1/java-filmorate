@@ -21,11 +21,11 @@ public class UserService {
     }
 
     public User addFriend(Long idUser, Long idFriend) {
-        Map<Long, User> users = userStorage.getAllUsers();
+        List<User> users = userStorage.getAllUsers();
         checkUserContainsInMap(users, idUser);
         checkUserContainsInMap(users, idFriend);
-        User user = users.get(idUser);
-        User friend = users.get(idFriend);
+        User user = userStorage.getUser(idUser);
+        User friend = userStorage.getUser(idFriend);
         HashSet<Long> userFriends = user.getFriends();
         HashSet<Long> friendFriends = friend.getFriends();
         userFriends.add(idFriend);
@@ -34,36 +34,36 @@ public class UserService {
     }
 
     public void deleteFriend(Long idUser, Long idFriend) {
-        Map<Long, User> users = userStorage.getAllUsers();
+        List<User> users = userStorage.getAllUsers();
         checkUserContainsInMap(users, idUser);
-        users.get(idUser).getFriends().remove(idFriend);
-        users.get(idFriend).getFriends().remove(idUser);
+        userStorage.getUser(idUser).getFriends().remove(idFriend);
+        userStorage.getUser(idFriend).getFriends().remove(idUser);
     }
 
     public List<User> getFriends(Long id) {
-        Map<Long, User> users = userStorage.getAllUsers();
+        List<User> users = userStorage.getAllUsers();
         checkUserContainsInMap(users, id);
-        return users.get(id).getFriends().stream()
-                .map(users::get)
+        return userStorage.getUser(id).getFriends().stream()
+                .map(this::getUser)
                 .collect(Collectors.toList());
     }
 
     public List<User> getCommonFriends(Long id, Long otherId) {
-        Map<Long, User> users = userStorage.getAllUsers();
+        List<User> users = userStorage.getAllUsers();
         checkUserContainsInMap(users, id);
         checkUserContainsInMap(users, otherId);
-        User user = users.get(id);
-        User otherUser = users.get(otherId);
+        User user = userStorage.getUser(id);
+        User otherUser = userStorage.getUser(otherId);
         Set<Long> userFriends = user.getFriends();
         Set<Long> otherUserFriends = otherUser.getFriends();
         return userFriends.stream()
                 .filter(otherUserFriends::contains)
-                .map(i -> userStorage.getAllUsers().get(i))
+                .map(userStorage::getUser)
                 .collect(Collectors.toList());
     }
 
-    private void checkUserContainsInMap(Map<Long, User> users, long id) {
-        if (!(users.containsKey(id))) {
+    private void checkUserContainsInMap(List<User> users, long id) {
+        if (!(users.contains(userStorage.getUser(id)))) {
             log.error("Пользователь с id '{}' не найден.", id);
             throw new UserNotFoundException(
                     String.format("Пользователь с id:'%d' не найден.", id)
@@ -79,7 +79,7 @@ public class UserService {
         return userStorage.updateUser(user);
     }
 
-    public Map<Long, User> getAllUsers() {
+    public List<User> getAllUsers() {
         return userStorage.getAllUsers();
     }
 
