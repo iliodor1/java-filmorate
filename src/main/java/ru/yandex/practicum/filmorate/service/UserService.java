@@ -17,17 +17,17 @@ public class UserService {
         this.userStorage = storage;
     }
 
-    public User addFriend(Long idUser, Long idFriend) {
-        User user = userStorage.getUser(idUser);
-        User friend = userStorage.getUser(idFriend);
-        user.getFriends().add(idFriend);
-        friend.getFriends().add(idUser);
+    public User addFriend(Long userId, Long friendId) {
+        User user = userStorage.getUser(userId);
+        User friend = userStorage.getUser(friendId);
+        user.getFriends().add(friendId);
+        friend.getFriends().add(userId);
         return friend;
     }
 
-    public void deleteFriend(Long idUser, Long idFriend) {
-        userStorage.getUser(idUser).getFriends().remove(idFriend);
-        userStorage.getUser(idFriend).getFriends().remove(idUser);
+    public void deleteFriend(Long userId, Long friendId) {
+        userStorage.getUser(userId).getFriends().remove(friendId);
+        userStorage.getUser(friendId).getFriends().remove(userId);
     }
 
     public List<User> getFriends(Long id) {
