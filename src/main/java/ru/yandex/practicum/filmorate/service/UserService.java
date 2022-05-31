@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 @Service
 @Slf4j
 public class UserService {
-    UserStorage userStorage;
+    private final UserStorage userStorage;
 
     @Autowired
     public UserService(UserStorage storage) {
@@ -58,16 +58,32 @@ public class UserService {
         Set<Long> otherUserFriends = otherUser.getFriends();
         return userFriends.stream()
                 .filter(otherUserFriends::contains)
-                .map(i-> userStorage.getAllUsers().get(i))
+                .map(i -> userStorage.getAllUsers().get(i))
                 .collect(Collectors.toList());
     }
 
-    private void checkUserContainsInMap(Map<Long, User> users, long id){
-        if (!(users.containsKey(id))){
+    private void checkUserContainsInMap(Map<Long, User> users, long id) {
+        if (!(users.containsKey(id))) {
             log.error("Пользователь с id '{}' не найден.", id);
             throw new UserNotFoundException(
                     String.format("Пользователь с id:'%d' не найден.", id)
             );
         }
+    }
+
+    public User addUser(User user) {
+        return userStorage.addUser(user);
+    }
+
+    public User updateUser(User user) {
+        return userStorage.updateUser(user);
+    }
+
+    public Map<Long, User> getAllUsers() {
+        return userStorage.getAllUsers();
+    }
+
+    public User getUser(Long id) {
+        return userStorage.getUser(id);
     }
 }
