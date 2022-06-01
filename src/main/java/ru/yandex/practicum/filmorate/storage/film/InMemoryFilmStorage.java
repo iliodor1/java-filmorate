@@ -22,7 +22,6 @@ public class InMemoryFilmStorage implements FilmStorage {
     private final Map<Long, Film> films;
     private long idCounter;
 
-    @Autowired
     public InMemoryFilmStorage() {
         films = new HashMap<>();
     }
