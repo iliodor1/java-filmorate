@@ -55,8 +55,8 @@ public class UserService {
         return userStorage.updateUser(user);
     }
 
-    public List<User> getAllUsers() {
-        return userStorage.getAllUsers();
+    public List<User> getUsers() {
+        return userStorage.getUsers();
     }
 
     public User getUser(Long id) {
