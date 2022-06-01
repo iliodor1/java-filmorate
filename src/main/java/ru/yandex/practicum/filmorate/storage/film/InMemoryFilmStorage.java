@@ -3,6 +3,7 @@ package ru.yandex.practicum.filmorate.storage.film;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import ru.yandex.practicum.filmorate.exception.ConflictRequestException;
 import ru.yandex.practicum.filmorate.exception.FilmNotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
@@ -41,7 +42,7 @@ public class InMemoryFilmStorage implements FilmStorage {
                     film.getName(),
                     film.getReleaseDate()
             );
-            throw new ValidationException("This film already exists");
+            throw new ConflictRequestException("This film already exists");
         } else if (isValid(film)) {
             film.setId(createID());
             films.put(film.getId(), film);
