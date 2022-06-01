@@ -60,7 +60,7 @@ public class FilmService {
     }
 
     public Film updateFilm(Film film) {
-        return filmStorage.updateFilm(film);
+        return filmStorage.update(film);
     }
 
     public List<Film> getFilms() {

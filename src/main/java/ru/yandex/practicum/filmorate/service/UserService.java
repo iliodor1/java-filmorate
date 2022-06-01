@@ -52,7 +52,7 @@ public class UserService {
     }
 
     public User updateUser(User user) {
-        return userStorage.updateUser(user);
+        return userStorage.update(user);
     }
 
     public List<User> getUsers() {
