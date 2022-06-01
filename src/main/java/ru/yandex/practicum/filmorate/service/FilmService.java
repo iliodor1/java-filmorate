@@ -49,7 +49,7 @@ public class FilmService {
     }
 
     public List<Film> getPopular(int count) {
-        return filmStorage.getAllFilms().stream()
+        return filmStorage.getFilms().stream()
                 .sorted(Comparator.comparingInt(f0 -> f0.getLikes().size() * -1))
                 .limit(count)
                 .collect(Collectors.toList());
@@ -63,8 +63,8 @@ public class FilmService {
         return filmStorage.updateFilm(film);
     }
 
-    public List<Film> getAllFilms() {
-        return filmStorage.getAllFilms();
+    public List<Film> getFilms() {
+        return filmStorage.getFilms();
     }
 
     public Film getFilm(Long id) {
