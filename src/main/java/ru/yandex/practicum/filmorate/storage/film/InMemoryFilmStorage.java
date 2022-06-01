@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Component
@@ -28,7 +27,7 @@ public class InMemoryFilmStorage implements FilmStorage {
         films = new HashMap<>();
     }
 
-    private long createID() {
+    private long createId() {
         return ++idCounter;
     }
 
@@ -44,7 +43,7 @@ public class InMemoryFilmStorage implements FilmStorage {
             );
             throw new ConflictRequestException("This film already exists");
         } else if (isValid(film)) {
-            film.setId(createID());
+            film.setId(createId());
             films.put(film.getId(), film);
             log.info("Добавлен фильм: {}", film.getName());
         }

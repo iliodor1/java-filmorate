@@ -23,7 +23,7 @@ public class InMemoryUserStorage implements UserStorage {
         users = new HashMap<>();
     }
 
-    private long createID() {
+    private long createId() {
         return ++idCounter;
     }
 
@@ -37,7 +37,7 @@ public class InMemoryUserStorage implements UserStorage {
             throw new ConflictRequestException("This user already exists");
         }
         isValid(user);
-        if (user.getId() == null) user.setId(createID());
+        if (user.getId() == null) user.setId(createId());
         users.put(user.getId(), user);
 
         return user;
