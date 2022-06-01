@@ -48,7 +48,7 @@ public class UserService {
     }
 
     public User addUser(User user) {
-        return userStorage.addUser(user);
+        return userStorage.add(user);
     }
 
     public User updateUser(User user) {

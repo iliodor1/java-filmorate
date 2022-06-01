@@ -28,7 +28,7 @@ public class InMemoryUserStorage implements UserStorage {
     }
 
     @Override
-    public User addUser(User user) {
+    public User add(User user) {
         if (users.values().stream()
                 .filter(x -> x.getLogin().equalsIgnoreCase(user.getLogin()))
                 .anyMatch(x -> x.getEmail().equalsIgnoreCase(user.getEmail()))) {

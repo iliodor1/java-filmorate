@@ -32,7 +32,7 @@ public class InMemoryFilmStorage implements FilmStorage {
     }
 
     @Override
-    public Film addFilm(Film film) {
+    public Film add(Film film) {
         if (films.values().stream()
                 .filter(x -> x.getName().equalsIgnoreCase(film.getName()))
                 .anyMatch(x -> x.getReleaseDate().equals(film.getReleaseDate()))) {

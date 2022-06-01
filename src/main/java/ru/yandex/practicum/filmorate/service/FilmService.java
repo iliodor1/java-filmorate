@@ -56,7 +56,7 @@ public class FilmService {
     }
 
     public Film addFilm(Film film) {
-        return filmStorage.addFilm(film);
+        return filmStorage.add(film);
     }
 
     public Film updateFilm(Film film) {
