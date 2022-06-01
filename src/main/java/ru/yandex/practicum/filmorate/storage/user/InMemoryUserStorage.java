@@ -17,13 +17,13 @@ import java.util.Map;
 @Slf4j
 public class InMemoryUserStorage implements UserStorage {
     private final Map<Long, User> users;
-    private static long idCounter;
+    private long idCounter;
 
     public InMemoryUserStorage() {
         users = new HashMap<>();
     }
 
-    private static long createID() {
+    private long createID() {
         return ++idCounter;
     }
 

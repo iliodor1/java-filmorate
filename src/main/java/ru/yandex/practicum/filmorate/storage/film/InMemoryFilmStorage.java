@@ -18,17 +18,17 @@ import java.util.stream.Collectors;
 @Slf4j
 @Component
 public class InMemoryFilmStorage implements FilmStorage {
-    private static final int MAX_DESCRIPTION_SIZE = 200;
-    private static final LocalDate FIRST_EVER_FILM = LocalDate.of(1895, 12, 28);
+    private final int MAX_DESCRIPTION_SIZE = 200;
+    private final LocalDate FIRST_EVER_FILM = LocalDate.of(1895, 12, 28);
     private final Map<Long, Film> films;
-    private static long idCounter = 0;
+    private long idCounter;
 
     @Autowired
     public InMemoryFilmStorage() {
         films = new HashMap<>();
     }
 
-    private static long createID() {
+    private long createID() {
         return ++idCounter;
     }
 
