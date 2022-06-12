@@ -1,7 +1,7 @@
 # java-filmorate
 Template repository for Filmorate project.
 
-![img_4.png](img_4.png)
+![img_4.png](https://lh3.googleusercontent.com/pw/AM-JKLWHWvoBkn-6mgD3V-debCY72Lzn-T2M-fQxvZdiLGjP1Mf5OUyryrPNLvzIJwtU_5FDijhdoBQDmnbuZZLpPIONlAVTasbEAsMt4EmTJeq8RL7P5I9jQgEBEAraU0czXN65iNhB3Eqh6Y-ooCYE63vr=w981-h659-no?authuser=0.png)
 
 Примеры запросов:
 
