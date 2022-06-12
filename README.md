@@ -36,7 +36,7 @@ WHERE mpa_id in ('R','NC-17');
 Запрос на получение Топ 10 популярных фильмов
 ```
 SELECT f.name
-       COUNT(l.like_id) AS likes
+       COUNT(l.user_id) AS likes
 FROM film AS f
 LEFT JOIN like AS l ON f.id = l.film_id
 GROUP BY f.name
