@@ -36,7 +36,6 @@ public class InMemoryUserStorage implements UserStorage {
                     user.getLogin(), user.getEmail());
             throw new ConflictRequestException("This user already exists");
         }
-        isValid(user);
         if (user.getId() == null) user.setId(createId());
         users.put(user.getId(), user);
         return user;
@@ -48,10 +47,8 @@ public class InMemoryUserStorage implements UserStorage {
             throw new UserNotFoundException(
                     String.format("Пользователь с id:'%d' не найден.", user.getId()));
         }
-        if (isValid(user)) {
-            users.put(user.getId(), user);
-            log.info("Данные пользователя '{}' обновлены", user.getLogin());
-        }
+        users.put(user.getId(), user);
+        log.info("Данные пользователя '{}' обновлены", user.getLogin());
         return user;
     }
 
@@ -104,19 +101,4 @@ public class InMemoryUserStorage implements UserStorage {
                 .collect(Collectors.toList());
     }
 
-    private boolean isValid(User user) throws ValidationException {
-        if (user.getEmail().isBlank() || !user.getEmail().contains("@")) {
-            log.error("Некорректный адрес электронной почты");
-            throw new ValidationException("invalid email");
-        } else if (user.getLogin().isEmpty() || user.getLogin().contains(" ")) {
-            log.error("Логин не должен быть пустым и не должен содержать пробелов");
-            throw new ValidationException("invalid login");
-        } else if (user.getBirthday().isAfter(LocalDate.now())) {
-            log.error("Дата рождения не может быть в будущем");
-            throw new ValidationException("invalid birthday");
-        } else {
-            if (user.getName().isBlank()) user.setName(user.getLogin());
-            return true;
-        }
-    }
 }
