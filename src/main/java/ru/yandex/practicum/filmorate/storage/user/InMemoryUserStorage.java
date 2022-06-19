@@ -1,6 +1,7 @@
 package ru.yandex.practicum.filmorate.storage.user;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.exception.ConflictRequestException;
 import ru.yandex.practicum.filmorate.exception.UserNotFoundException;
@@ -8,13 +9,12 @@ import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Component
 @Slf4j
+@Qualifier("memory")
 public class InMemoryUserStorage implements UserStorage {
     private final Map<Long, User> users;
     private long idCounter;
@@ -39,7 +39,6 @@ public class InMemoryUserStorage implements UserStorage {
         isValid(user);
         if (user.getId() == null) user.setId(createId());
         users.put(user.getId(), user);
-
         return user;
     }
 
@@ -70,6 +69,39 @@ public class InMemoryUserStorage implements UserStorage {
             );
         }
         return users.get(id);
+    }
+
+    @Override
+    public void addFriend(Long userId, Long friendId) {
+        User user = getUser(userId);
+        User friend = getUser(friendId);
+        user.getFriends().add(friendId);
+        friend.getFriends().add(userId);
+    }
+
+    @Override
+    public void deleteFriend(Long userId, Long friendId) {
+        getUser(userId).getFriends().remove(friendId);
+        getUser(friendId).getFriends().remove(userId);
+    }
+
+    @Override
+    public List<User> getFriends(Long id) {
+        return getUser(id).getFriends().stream()
+                .map(this::getUser)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<User> getCommonFriends(Long id, Long otherId) {
+        User user = getUser(id);
+        User otherUser = getUser(otherId);
+        Set<Long> userFriends = user.getFriends();
+        Set<Long> otherUserFriends = otherUser.getFriends();
+        return userFriends.stream()
+                .filter(otherUserFriends::contains)
+                .map(this::getUser)
+                .collect(Collectors.toList());
     }
 
     private boolean isValid(User user) throws ValidationException {
