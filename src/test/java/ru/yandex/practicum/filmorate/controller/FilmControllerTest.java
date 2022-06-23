@@ -21,7 +21,7 @@ class FilmControllerTest {
         mockMvc.perform(post("/films")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
-                        .content("{\"name\": \"once upon a time\",\"description\": \"film description\","
+                        .content("{\"name\": \"it\",\"description\": \"film description\","
                                 + "\"releaseDate\": \"1967-03-25\", \"duration\": 90}"))
                 .andExpect(status().isOk());
     }
@@ -41,10 +41,14 @@ class FilmControllerTest {
         mockMvc.perform(post("/films")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
-                        .content("{\"name\": \"once upon a time\",\"description\": \"aaaaaaaaaaaaaaaaaaaaaaaaa      "
-                                + "              ffffffffffffffffffffffffffffffffffffffffffffffffvvvvvvvvvvvvvvvvvvvvv"
-                                + "vvvvvvvvvd78878sfowporewjroieweeeeeeeeeeeeeeeeeeeeee5432534534tffgggfhfhfhfghgfgfhf"
-                                + "ghgfhg\","
+                        .content("{\"name\": \"once upon a time\",\"description\": " +
+                                "\"ttttttttttttttttTtttttttttttttttttttt" +
+                                "ooooooooooooooooooOoooooooooooooooooooo" +
+                                "ooooooooooooooooooOoooooooooooooooooooo" +
+                                "llllllllllllllllllLllllllllllllllllllll" +
+                                "ooooooooooooooooooOoooooooooooooooooooo" +
+                                "nnnnnnnnnnnnnnnnnnNnnnnnnnnnnnnnnnnnnnn" +
+                                "ggggggggggggggggggGgggggggggggggggg\","
                                 + "\"releaseDate\": \"1967-03-25\", \"duration\": 90}"))
                 .andExpect(status().is4xxClientError());
     }
