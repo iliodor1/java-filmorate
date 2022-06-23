@@ -11,7 +11,7 @@ import java.util.Set;
 @Data
 @AllArgsConstructor
 public class User {
-
+    @Positive
     private Long id;
     private String email;
     private String login;

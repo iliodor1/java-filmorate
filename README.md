@@ -25,7 +25,7 @@ FROM user
 WHERE id in
     (SELECT friend_id
      FROM friend
-     WHERE friendship = false);
+     WHERE friendStorage = false);
 ```
 Запрос на получение списка фильмов с рейтингом R и NC-17
 ```

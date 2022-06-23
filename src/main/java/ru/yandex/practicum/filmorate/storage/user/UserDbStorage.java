@@ -6,12 +6,11 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.storage.mapper.UserRowMapper;
 
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Component
 @Qualifier("dataBase")
@@ -42,52 +41,15 @@ public class UserDbStorage implements UserStorage {
     @Override
     public List<User> getUsers() {
         String sqlQuery = "SELECT * FROM users";
-        return jdbcTemplate.query(sqlQuery, this::mapRowToUser);
+        return jdbcTemplate.query(sqlQuery, new UserRowMapper());
     }
 
     @Override
-    public User getUser(Long id) {
+    public Optional<User> getUser(Long id) {
         String sqlQuery = "SELECT *\n" +
                 "FROM users\n" +
                 "WHERE id = ?";
-        return jdbcTemplate.queryForObject(sqlQuery, this::mapRowToUser, id);
-    }
-
-    @Override
-    public void addFriend(Long userId, Long friendId) {
-        String sqlQuery = "INSERT INTO friends(user_id, friend_id) VALUES (?, ?)";
-        jdbcTemplate.update(sqlQuery, userId, friendId);
-    }
-
-    public List<User> getFriends(Long id) {
-        String sqlQuery = "SELECT *\n" +
-                "FROM users\n" +
-                "WHERE id in\n" +
-                "    (SELECT friend_id\n" +
-                "     FROM friends\n" +
-                "     WHERE user_id = ?)";
-        return jdbcTemplate.query(sqlQuery, this::mapRowToUser, id);
-    }
-
-    @Override
-    public List<User> getCommonFriends(Long id, Long otherId) {
-        String sqlQuery = "SELECT * " +
-                "FROM users " +
-                "WHERE id IN " +
-                "   (SELECT friend_id " +
-                "   FROM friends " +
-                "   WHERE user_id = ?) AND id IN " +
-                "       (SELECT friend_id " +
-                "       FROM friends f " +
-                "       WHERE f.user_id = ?)";
-
-        return jdbcTemplate.query(sqlQuery, this::mapRowToUser, id, otherId);
-    }
-
-    @Override
-    public void deleteFriend(Long userId, Long friendId) {
-        String sqlQuery = "DELETE FROM friends WHERE user_id = ? AND friend_id = ?";
-        jdbcTemplate.update(sqlQuery, userId, friendId);
+        return jdbcTemplate.query(sqlQuery, new UserRowMapper(), id).stream().findFirst();
     }
 
     @Override
@@ -106,16 +68,6 @@ public class UserDbStorage implements UserStorage {
         }, keyHolder);
         user.setId(keyHolder.getKey().longValue());
         return user;
-    }
-
-    private User mapRowToUser(ResultSet resultSet, int rowNum) throws SQLException {
-        Long id = resultSet.getLong("id");
-        String email = resultSet.getString("email");
-        String login = resultSet.getString("login");
-        String name = resultSet.getString("name");
-        LocalDate birthday = resultSet.getDate("birthday").toLocalDate();
-
-        return new User(id, email, login, name, birthday);
     }
 
 }

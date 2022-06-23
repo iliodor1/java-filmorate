@@ -6,6 +6,7 @@ import ru.yandex.practicum.filmorate.exception.BadRequestException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
+import ru.yandex.practicum.filmorate.model.Mpa;
 import ru.yandex.practicum.filmorate.service.FilmService;
 
 import java.util.List;
@@ -58,12 +59,23 @@ public class FilmController {
     }
 
     @GetMapping("/genres/{id}")
-    public Genre get(@PathVariable int id){
-        return filmService.get(id);
+    public Genre getGenre(@PathVariable int id) {
+        return filmService.getGenre(id);
     }
 
     @GetMapping("/genres")
-    public List<Genre> getAll(){
-        return filmService.getAll();
+    public List<Genre> getGenres() {
+        return filmService.getGenres();
     }
+
+    @GetMapping("/mpa/{id}")
+    public Mpa getMpa(@PathVariable int id) {
+        return filmService.getMpa(id);
+    }
+
+    @GetMapping("/mpa")
+    public List<Mpa> getMpas() {
+        return filmService.getMpas();
+    }
+
 }

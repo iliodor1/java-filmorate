@@ -1,7 +1,9 @@
 package ru.yandex.practicum.filmorate.controller;
 
+import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
@@ -14,6 +16,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @AutoConfigureMockMvc
 @SpringBootTest
+@AutoConfigureTestDatabase
+@RequiredArgsConstructor(onConstructor_ = @Autowired)
 class UserControllerTest {
     @Autowired
     private MockMvc mockMvc;
@@ -25,9 +29,12 @@ class UserControllerTest {
         mockMvc.perform(post("/users")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
-                        .content("{\"email\": \"mail@mail.ru\"," +
-                                "\"login\": \"Ivan\", \"name\": \"Ivan\"" +
-                                ", \"birthday\": \"2000-02-02\"}"))
+                        .content("{\n" +
+                                "  \"login\": \"login\",\n" +
+                                "  \"name\": \"Name\",\n" +
+                                "  \"email\": \"mail@mail.ru\",\n" +
+                                "  \"birthday\": \"2005-03-20\"\n" +
+                                "}"))
                 .andExpect(status().isOk());
     }
 
@@ -58,11 +65,11 @@ class UserControllerTest {
         mockMvc.perform(post("/users")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
-                        .content("{\"email\": \"mail@mail.ru\"," +
-                                "\"login\": \"John\", \"name\": \"\"" +
+                        .content("{\"email\": \"mail1@mail.ru\"," +
+                                "\"login\": \"John1\", \"name\": \"\"" +
                                 ", \"birthday\": \"2000-02-02\"}"))
-                .andExpect(content().json("{\"id\": 0,\"email\": \"mail@mail.ru\"," +
-                        "\"login\": \"John\", \"name\": \"John\"" +
+                .andExpect(content().json("{\"email\": \"mail1@mail.ru\"," +
+                        "\"login\": \"John1\", \"name\": \"John1\"" +
                         ", \"birthday\": \"2000-02-02\"}"))
                 .andExpect(status().isOk());
     }
@@ -105,25 +112,34 @@ class UserControllerTest {
         mockMvc.perform(post("/users")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
-                        .content("{\"email\": \"mail@mail.ru\"," +
-                                "\"login\": \"Jonathan\", \"name\": \"Ivan\"" +
-                                ", \"birthday\": \"2000-02-02\"}"))
+                        .content("{\n" +
+                                "  \"login\": \"login2\",\n" +
+                                "  \"name\": \"Name2\",\n" +
+                                "  \"email\": \"mail@mail.ru2\",\n" +
+                                "  \"birthday\": \"2005-03-20\"\n" +
+                                "}"))
                 .andExpect(status().isOk());
 
         mockMvc.perform(post("/users")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
-                        .content("{\"email\": \"mail@mail.ru\"," +
-                                "\"login\": \"Jonathan\", \"name\": \"Ivan\"" +
-                                ", \"birthday\": \"1920-02-02\"}"))
+                        .content("{\n" +
+                                "  \"login\": \"login2\",\n" +
+                                "  \"name\": \"Name2\",\n" +
+                                "  \"email\": \"mail@mail.ru2\",\n" +
+                                "  \"birthday\": \"2005-03-20\"\n" +
+                                "}"))
                 .andExpect(status().is4xxClientError());
 
         mockMvc.perform(post("/users")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
-                        .content("{\"email\": \"mail@yandex.ru\"," +
-                                "\"login\": \"Jonathan\", \"name\": \"Ivan\"" +
-                                ", \"birthday\": \"1920-02-02\"}"))
+                        .content("{\n" +
+                                "  \"login\": \"login3\",\n" +
+                                "  \"name\": \"Name3\",\n" +
+                                "  \"email\": \"mail@mail.ru3\",\n" +
+                                "  \"birthday\": \"2005-03-20\"\n" +
+                                "}"))
                 .andExpect(status().isOk());
     }
 
