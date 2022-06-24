@@ -1,7 +1,7 @@
 # java-filmorate
 Template repository for Filmorate project.
 
-![img_4.png](https://github.com/iliodor1/java-filmorate/blob/add-database/Untitled.png?raw=true)
+![img_4.png](src/main/resources/Untitled.png)
 
 Примеры запросов:
 
