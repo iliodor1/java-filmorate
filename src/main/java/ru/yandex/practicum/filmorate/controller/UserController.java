@@ -9,7 +9,6 @@ import ru.yandex.practicum.filmorate.service.UserService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/users")
 public class UserController {
     private final UserService userService;
 
@@ -18,45 +17,44 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping
+    @PostMapping("/users")
     public User addUser(@RequestBody User user) throws ValidationException {
         return userService.addUser(user);
     }
 
-    @PutMapping
+    @PutMapping("/users")
     public User updateUser(@RequestBody User user) throws ValidationException {
         return userService.updateUser(user);
     }
 
-    @GetMapping
+    @GetMapping("/users")
     public List<User> getUsers() {
         return userService.getUsers();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/users/{id}")
     public User getUser(@PathVariable Long id) {
         return userService.getUser(id);
     }
 
-    @PutMapping("/{id}/friends/{friendId}")
-    public void addFriend(@PathVariable Long id, @PathVariable Long friendId) {
-        userService.addFriend(id, friendId);
+    @PutMapping("/users/{id}/friends/{friendId}")
+    public User addFriend(@PathVariable Long id, @PathVariable Long friendId) {
+        return userService.addFriend(id, friendId);
     }
 
-    @DeleteMapping("/{id}/friends/{friendId}")
+    @DeleteMapping("/users/{id}/friends/{friendId}")
     public void deleteFriend(@PathVariable Long id, @PathVariable Long friendId) {
         userService.deleteFriend(id, friendId);
     }
 
-    @GetMapping("/{id}/friends")
+    @GetMapping("/users/{id}/friends")
     public List<User> getFriends(@PathVariable Long id) {
         return userService.getFriends(id);
     }
 
-    @GetMapping("/{id}/friends/common/{otherId}")
+    @GetMapping("/users/{id}/friends/common/{otherId}")
     public List<User> getCommonFriends(@PathVariable Long id, @PathVariable Long otherId) {
         return userService.getCommonFriends(id, otherId);
     }
-
 }
 

@@ -1,70 +1,58 @@
 package ru.yandex.practicum.filmorate.service;
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-import ru.yandex.practicum.filmorate.exception.ConflictRequestException;
-import ru.yandex.practicum.filmorate.storage.user.friendship.FriendStorage;
-import ru.yandex.practicum.filmorate.exception.NotFoundRequestException;
-import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 
-import java.time.LocalDate;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
-@Slf4j
 public class UserService {
     private final UserStorage userStorage;
-    private final FriendStorage friendStorage;
 
     @Autowired
-    public UserService(@Qualifier("dataBase") UserStorage userStorage,
-                       @Qualifier("dataBase") FriendStorage friendStorage) {
-        this.userStorage = userStorage;
-        this.friendStorage = friendStorage;
+    public UserService(UserStorage storage) {
+        this.userStorage = storage;
     }
 
-    public void addFriend(Long userId, Long friendId) {
-        getUser(userId);
-        getUser(friendId);
-        friendStorage.addFriend(userId, friendId);
+    public User addFriend(Long userId, Long friendId) {
+        User user = userStorage.getUser(userId);
+        User friend = userStorage.getUser(friendId);
+        user.getFriends().add(friendId);
+        friend.getFriends().add(userId);
+        return friend;
     }
 
     public void deleteFriend(Long userId, Long friendId) {
-        getUser(userId);
-        getUser(friendId);
-        friendStorage.deleteFriend(userId, friendId);
+        userStorage.getUser(userId).getFriends().remove(friendId);
+        userStorage.getUser(friendId).getFriends().remove(userId);
     }
 
     public List<User> getFriends(Long id) {
-        return friendStorage.getFriends(id);
+        return userStorage.getUser(id).getFriends().stream()
+                .map(this::getUser)
+                .collect(Collectors.toList());
     }
 
     public List<User> getCommonFriends(Long id, Long otherId) {
-        return friendStorage.getCommonFriends(id, otherId);
+        User user = userStorage.getUser(id);
+        User otherUser = userStorage.getUser(otherId);
+        Set<Long> userFriends = user.getFriends();
+        Set<Long> otherUserFriends = otherUser.getFriends();
+        return userFriends.stream()
+                .filter(otherUserFriends::contains)
+                .map(userStorage::getUser)
+                .collect(Collectors.toList());
     }
 
     public User addUser(User user) {
-        isValid(user);
-        if (getUsers().stream()
-                .filter(x -> x.getLogin().equalsIgnoreCase(user.getLogin()))
-                .anyMatch(x -> x.getEmail().equalsIgnoreCase(user.getEmail()))) {
-            log.error("Пользователь '{}' с элетронной почтой '{}' уже существует.",
-                    user.getLogin(), user.getEmail());
-            throw new ConflictRequestException("This user already exists");
-        }
         return userStorage.add(user);
     }
 
     public User updateUser(User user) {
-        isValid(user);
-        getUser(user.getId());
-        userStorage.update(user);
-        log.info("Данные пользователя '{}' обновлены", user.getLogin());
-        return user;
+        return userStorage.update(user);
     }
 
     public List<User> getUsers() {
@@ -72,24 +60,6 @@ public class UserService {
     }
 
     public User getUser(Long id) {
-        return userStorage.getUser(id).orElseThrow(() -> new NotFoundRequestException(
-                String.format("User with id '%s' does not exist", id))
-        );
+        return userStorage.getUser(id);
     }
-
-    private void isValid(User user) throws ValidationException {
-        if (user.getEmail().isBlank() || !user.getEmail().contains("@")) {
-            log.error("Некорректный адрес электронной почты");
-            throw new ValidationException("invalid email");
-        } else if (user.getLogin().isEmpty() || user.getLogin().contains(" ")) {
-            log.error("Логин не должен быть пустым и не должен содержать пробелов");
-            throw new ValidationException("invalid login");
-        } else if (user.getBirthday().isAfter(LocalDate.now())) {
-            log.error("Дата рождения не может быть в будущем");
-            throw new ValidationException("invalid birthday");
-        } else {
-            if (user.getName().isBlank()) user.setName(user.getLogin());
-        }
-    }
-
 }

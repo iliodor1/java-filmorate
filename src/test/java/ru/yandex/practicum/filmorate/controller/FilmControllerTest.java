@@ -1,9 +1,7 @@
 package ru.yandex.practicum.filmorate.controller;
 
-import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
@@ -14,8 +12,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @AutoConfigureMockMvc
 @SpringBootTest
-@AutoConfigureTestDatabase
-@RequiredArgsConstructor(onConstructor_ = @Autowired)
 class FilmControllerTest {
     @Autowired
     private MockMvc mockMvc;
@@ -25,13 +21,8 @@ class FilmControllerTest {
         mockMvc.perform(post("/films")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
-                        .content("{\n" +
-                                "  \"name\": \"name25\",\n" +
-                                "  \"releaseDate\": \"1979-04-17\",\n" +
-                                "  \"description\": \"description\",\n" +
-                                "  \"duration\": 100,\n" +
-                                "  \"mpa\": { \"id\": 1}\n" +
-                                "}"))
+                        .content("{\"name\": \"once upon a time\",\"description\": \"film description\","
+                                + "\"releaseDate\": \"1967-03-25\", \"duration\": 90}"))
                 .andExpect(status().isOk());
     }
 
@@ -50,14 +41,10 @@ class FilmControllerTest {
         mockMvc.perform(post("/films")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
-                        .content("{\"name\": \"once upon a time\",\"description\": " +
-                                "\"ttttttttttttttttTtttttttttttttttttttt" +
-                                "ooooooooooooooooooOoooooooooooooooooooo" +
-                                "ooooooooooooooooooOoooooooooooooooooooo" +
-                                "llllllllllllllllllLllllllllllllllllllll" +
-                                "ooooooooooooooooooOoooooooooooooooooooo" +
-                                "nnnnnnnnnnnnnnnnnnNnnnnnnnnnnnnnnnnnnnn" +
-                                "ggggggggggggggggggGgggggggggggggggg\","
+                        .content("{\"name\": \"once upon a time\",\"description\": \"aaaaaaaaaaaaaaaaaaaaaaaaa      "
+                                + "              ffffffffffffffffffffffffffffffffffffffffffffffffvvvvvvvvvvvvvvvvvvvvv"
+                                + "vvvvvvvvvd78878sfowporewjroieweeeeeeeeeeeeeeeeeeeeee5432534534tffgggfhfhfhfghgfgfhf"
+                                + "ghgfhg\","
                                 + "\"releaseDate\": \"1967-03-25\", \"duration\": 90}"))
                 .andExpect(status().is4xxClientError());
     }
@@ -87,37 +74,22 @@ class FilmControllerTest {
         mockMvc.perform(post("/films")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
-                        .content("{\n" +
-                                "  \"name\": \"name12\",\n" +
-                                "  \"releaseDate\": \"1979-04-17\",\n" +
-                                "  \"description\": \"description\",\n" +
-                                "  \"duration\": 100,\n" +
-                                "  \"mpa\": { \"id\": 1}\n" +
-                                "}"))
+                        .content("{\"name\": \"once upon a time\",\"description\": \"film description\","
+                                + "\"releaseDate\": \"1985-12-28\", \"duration\": 100}"))
                 .andExpect(status().isOk());
 
         mockMvc.perform(post("/films")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
-                        .content("{\n" +
-                                "  \"name\": \"name12\",\n" +
-                                "  \"releaseDate\": \"1979-04-17\",\n" +
-                                "  \"description\": \"description\",\n" +
-                                "  \"duration\": 100,\n" +
-                                "  \"mpa\": { \"id\": 1}\n" +
-                                "}"))
+                        .content("{\"name\": \"once upon a time\", \"description\": \"film description\","
+                                + "\"releaseDate\": \"1985-12-28\", \"duration\": 90}"))
                 .andExpect(status().is4xxClientError());
 
         mockMvc.perform(post("/films")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
-                        .content("{\n" +
-                                "  \"name\": \"name13\",\n" +
-                                "  \"releaseDate\": \"1979-04-17\",\n" +
-                                "  \"description\": \"description\",\n" +
-                                "  \"duration\": 100,\n" +
-                                "  \"mpa\": { \"id\": 1}\n" +
-                                "}"))
+                        .content("{\"name\": \"once upon a time\", \"description\": \"film description\","
+                                + "\"releaseDate\": \"2021-12-28\", \"duration\": 90}"))
                 .andExpect(status().isOk());
     }
 
