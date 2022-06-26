@@ -5,13 +5,12 @@ import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.exception.BadRequestException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.model.Genre;
-import ru.yandex.practicum.filmorate.model.Mpa;
 import ru.yandex.practicum.filmorate.service.FilmService;
 
 import java.util.List;
 
 @RestController
+@RequestMapping("films")
 public class FilmController {
     private final FilmService filmService;
 
@@ -20,62 +19,42 @@ public class FilmController {
         this.filmService = filmService;
     }
 
-    @PostMapping("/films")
+    @PostMapping
     public Film addFilm(@RequestBody Film film) throws ValidationException {
         return filmService.addFilm(film);
     }
 
-    @PutMapping("/films")
+    @PutMapping
     public Film updateFilm(@RequestBody Film film) throws ValidationException {
         return filmService.updateFilm(film);
     }
 
-    @GetMapping("/films")
+    @GetMapping
     public List<Film> getFilms() {
         return filmService.getFilms();
     }
 
-    @GetMapping("/films/{id}")
+    @GetMapping("/{id}")
     public Film getFilm(@PathVariable Long id) {
         return filmService.getFilm(id);
     }
 
-    @PutMapping("/films/{id}/like/{userId}")
+    @PutMapping("/{id}/like/{userId}")
     public void putLike(@PathVariable Long id, @PathVariable Long userId) {
         filmService.putLike(id, userId);
     }
 
-    @DeleteMapping("/films/{id}/like/{userId}")
+    @DeleteMapping("/{id}/like/{userId}")
     public void deleteLike(@PathVariable Long id, @PathVariable Long userId) {
         filmService.deleteLike(id, userId);
     }
 
-    @GetMapping("/films/popular")
+    @GetMapping("/popular")
     public List<Film> getPopular(@RequestParam(defaultValue = "10") int count) {
         if (count <= 0) {
             throw new BadRequestException("Параметр count имеет отрицательное значение.");
         }
         return filmService.getPopular(count);
-    }
-
-    @GetMapping("/genres/{id}")
-    public Genre getGenre(@PathVariable int id) {
-        return filmService.getGenre(id);
-    }
-
-    @GetMapping("/genres")
-    public List<Genre> getGenres() {
-        return filmService.getGenres();
-    }
-
-    @GetMapping("/mpa/{id}")
-    public Mpa getMpa(@PathVariable int id) {
-        return filmService.getMpa(id);
-    }
-
-    @GetMapping("/mpa")
-    public List<Mpa> getMpas() {
-        return filmService.getMpas();
     }
 
 }
