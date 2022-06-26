@@ -30,4 +30,3 @@ VALUES ('name1', 'description', '1977-01-01', 100, 1);
 
 INSERT INTO films (name, description, release_date, duration, mpa_id)
 VALUES ('name3', 'description', '1980-02-03', 100, 2);
-

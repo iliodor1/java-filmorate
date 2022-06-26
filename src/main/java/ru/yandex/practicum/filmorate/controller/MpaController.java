@@ -13,7 +13,7 @@ import ru.yandex.practicum.filmorate.service.MpaService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/mpa")
+@RequestMapping("mpa")
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 @AllArgsConstructor
 public class MpaController {

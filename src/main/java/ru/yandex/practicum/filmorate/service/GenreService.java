@@ -19,10 +19,11 @@ public class GenreService {
     GenreStorage genreStorage;
 
     public Genre getGenre(int id) {
-        return genreStorage.get(id).orElseThrow(() -> new NotFoundRequestException(
-                        String.format("Genre with id %s not exist", id)
-                )
-        );
+        return genreStorage.get(id)
+                .orElseThrow(() -> new NotFoundRequestException(
+                                String.format("Genre with id %s not exist", id)
+                        )
+                );
     }
 
     public Set<Genre> getFilmGenres(Long id) {

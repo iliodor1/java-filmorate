@@ -13,6 +13,7 @@ import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -30,12 +31,14 @@ public class UserService {
     public void addFriend(Long userId, Long friendId) {
         getUser(userId);
         getUser(friendId);
+
         friendStorage.addFriend(userId, friendId);
     }
 
     public void deleteFriend(Long userId, Long friendId) {
         getUser(userId);
         getUser(friendId);
+
         friendStorage.deleteFriend(userId, friendId);
     }
 
@@ -49,21 +52,28 @@ public class UserService {
 
     public User addUser(User user) {
         throwIfNotValid(user);
-        if (getUsers().stream()
-                .filter(x -> x.getLogin().equalsIgnoreCase(user.getLogin()))
-                .anyMatch(x -> x.getEmail().equalsIgnoreCase(user.getEmail()))) {
+
+        Optional<User> userOptional = getUsers().stream()
+                .filter(u -> u.getLogin().equalsIgnoreCase(user.getLogin())
+                        & u.getEmail().equalsIgnoreCase(user.getEmail()))
+                .findFirst();
+        if (userOptional.isPresent()) {
             log.error("Пользователь '{}' с элетронной почтой '{}' уже существует.",
                     user.getLogin(), user.getEmail());
             throw new ConflictRequestException("This user already exists");
         }
+
         return userStorage.add(user);
     }
 
     public User updateUser(User user) {
         throwIfNotValid(user);
+
         getUser(user.getId());
         userStorage.update(user);
+
         log.info("Данные пользователя '{}' обновлены", user.getLogin());
+
         return user;
     }
 
@@ -72,9 +82,10 @@ public class UserService {
     }
 
     public User getUser(Long id) {
-        return userStorage.getUser(id).orElseThrow(() -> new NotFoundRequestException(
-                String.format("User with id '%s' does not exist", id))
-        );
+        return userStorage.getUser(id)
+                .orElseThrow(() -> new NotFoundRequestException(
+                        String.format("User with id '%s' does not exist", id))
+                );
     }
 
     private void throwIfNotValid(User user) throws ValidationException {

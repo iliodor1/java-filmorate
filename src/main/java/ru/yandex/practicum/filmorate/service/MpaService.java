@@ -18,10 +18,11 @@ public class MpaService {
     MpaStorage mpaStorage;
 
     public Mpa getMpa(int id) {
-        return mpaStorage.get(id).orElseThrow(() -> new NotFoundRequestException(
-                        String.format("mpa with id '%s' not exist", id)
-                )
-        );
+        return mpaStorage.get(id)
+                .orElseThrow(() -> new NotFoundRequestException(
+                                String.format("mpa with id '%s' not exist", id)
+                        )
+                );
     }
 
     public List<Mpa> getMpas() {

@@ -14,6 +14,7 @@ import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -56,9 +57,11 @@ public class FilmService {
     public Film addFilm(Film film) {
         throwIfNotValid(film);
 
-        if (getFilms().stream()
-                .filter(x -> x.getName().equalsIgnoreCase(film.getName()))
-                .anyMatch(x -> x.getReleaseDate().equals(film.getReleaseDate()))) {
+        Optional<Film> filmOptional = getFilms().stream()
+                .filter((n) -> n.getName().equalsIgnoreCase(film.getName())
+                        & n.getReleaseDate().equals(film.getReleaseDate()))
+                .findFirst();
+        if (filmOptional.isPresent()) {
             log.error(
                     "Фильм '{}' с датой релиза '{}' уже добавлен.",
                     film.getName(),
@@ -66,6 +69,7 @@ public class FilmService {
             );
             throw new ConflictRequestException("This film already exists");
         }
+
         Film filmAdded = filmStorage.add(film);
         Set<Genre> genres = film.getGenres();
         if (genres != null) {
@@ -96,15 +100,9 @@ public class FilmService {
     }
 
     public Film getFilm(Long id) {
-        try {
-            filmStorage.getFilm(id);
-        }
-        catch (Exception e){
-            throw new RuntimeException(e.getMessage());
-        }
         return filmStorage.getFilm(id)
                 .orElseThrow(() -> new NotFoundRequestException(
-                String.format("Film with id '%s' does not exist", id)));
+                        String.format("Film with id '%s' does not exist", id)));
     }
 
     private void throwIfNotValid(Film film) throws ValidationException {
