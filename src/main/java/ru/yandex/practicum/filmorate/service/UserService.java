@@ -48,7 +48,7 @@ public class UserService {
     }
 
     public User addUser(User user) {
-        isValid(user);
+        throwIfNotValid(user);
         if (getUsers().stream()
                 .filter(x -> x.getLogin().equalsIgnoreCase(user.getLogin()))
                 .anyMatch(x -> x.getEmail().equalsIgnoreCase(user.getEmail()))) {
@@ -60,7 +60,7 @@ public class UserService {
     }
 
     public User updateUser(User user) {
-        isValid(user);
+        throwIfNotValid(user);
         getUser(user.getId());
         userStorage.update(user);
         log.info("Данные пользователя '{}' обновлены", user.getLogin());
@@ -77,7 +77,7 @@ public class UserService {
         );
     }
 
-    private void isValid(User user) throws ValidationException {
+    private void throwIfNotValid(User user) throws ValidationException {
         if (user.getEmail().isBlank() || !user.getEmail().contains("@")) {
             log.error("Некорректный адрес электронной почты");
             throw new ValidationException("invalid email");
